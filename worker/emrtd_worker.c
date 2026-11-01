@@ -623,9 +623,7 @@ static EmrtdError emrtd_worker_select_application(EmrtdWorker* worker, uint16_t*
     return EmrtdErrorNone;
 }
 
-static EmrtdError
-    emrtd_worker_select_master_file(EmrtdWorker* worker, uint16_t* out_sw) {
-
+static EmrtdError emrtd_worker_select_master_file(EmrtdWorker* worker, uint16_t* out_sw) {
     static const uint8_t master_file[] = {0x3F, 0x00};
 
     EmrtdCommandApdu command = {
