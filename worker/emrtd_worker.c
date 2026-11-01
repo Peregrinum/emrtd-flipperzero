@@ -623,9 +623,7 @@ static EmrtdError emrtd_worker_select_application(EmrtdWorker* worker, uint16_t*
     return EmrtdErrorNone;
 }
 
-static EmrtdError emrtd_worker_select_master_file(
-    EmrtdWorker* worker,
-    uint16_t* out_sw) {
+static EmrtdError emrtd_worker_select_master_file(EmrtdWorker* worker, uint16_t* out_sw) {
 
     static const uint8_t master_file[] = {0x3F, 0x00};
 
@@ -640,14 +638,11 @@ static EmrtdError emrtd_worker_select_master_file(
     };
 
     if(emrtd_worker_tracing(worker)) {
-        emrtd_export_trace_note(
-            worker->export_ctx,
-            "# select target=master-file");
+        emrtd_export_trace_note(worker->export_ctx, "# select target=master-file");
     }
 
     EmrtdResponseApdu response;
-    const EmrtdError error =
-        emrtd_worker_transmit(worker, &command, &response);
+    const EmrtdError error = emrtd_worker_transmit(worker, &command, &response);
 
     if(error != EmrtdErrorNone) {
         return error;
@@ -1802,7 +1797,7 @@ static void emrtd_worker_read(EmrtdWorker* worker) {
     }
     result->application_selected = true;
 
-	/*
+    /*
      * EF.CardAccess belongs to the Master File, not to the eMRTD application.
      * Explicitly select MF before selecting EF.CardAccess.
      */
@@ -1811,14 +1806,13 @@ static void emrtd_worker_read(EmrtdWorker* worker) {
     if(error != EmrtdErrorNone) {
         FURI_LOG_E(TAG, "SELECT master file failed: %s", emrtd_error_text(error));
         result->error = error;
-		return;
+        return;
     }
     if(sw != 0x9000) {
         FURI_LOG_E(TAG, "SELECT master file: %04X", sw);
         result->error = emrtd_error_from_sw(sw);
         return;
     }
-
 
     /* EF.CardAccess, read in the clear before anything is negotiated. */
     if(!emrtd_worker_report(
